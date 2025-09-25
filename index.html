@@ -74,6 +74,12 @@
 .c-btn.h-btn:hover {
   background-color: #3f396d;
 }
+#chatBot { position: fixed; bottom: 30px; right: 30px; z-index: 9999; }
+#chatBtn { background-color: #f97316; color: #fff; width: 60px; height: 60px; font-size: 1.5rem; border: none; border-radius: 50%; }
+#chatBox { position: absolute; bottom: 70px; right: 0; width: 300px; background: #fff; border-radius: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.3); overflow: hidden; }
+.chat-header { background-color: #3f396d; color: #fff; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+.chat-body { padding: 1rem; max-height: 200px; overflow-y: auto; }
+.chat-footer { padding: 1rem; border-top: 1px solid #ccc; }
 
     </style>
   </head>
@@ -978,6 +984,25 @@ I offer a powerful skill set that turns concepts into functional and user-friend
 </div>
 
 
+    <!-- chat boot -->
+    <div id="chatBot">
+  <button id="chatBtn" class="c-btn h-btn rounded-circle">💬</button>
+
+  <div id="chatBox" class="chat-box d-none">
+    <div class="chat-header">
+      Live Chat
+      <button id="closeChat" class="btn-close float-end"></button>
+    </div>
+    <div class="chat-body"></div>
+    <div class="chat-footer">
+      <input type="text" id="chatInput" placeholder="Type a message..." class="form-control"/>
+      <button id="sendMsg" class="c-btn h-btn mt-2 w-100">Send</button>
+    </div>
+  </div>
+</div>
+
+
+
     <!-- footer section ends here -->
 
       <!-- bootstrap javascript cdn link  -->
@@ -1000,6 +1025,67 @@ I offer a powerful skill set that turns concepts into functional and user-friend
 
     <!-- custom js file linking -->
     <script src="js/script.js"></script>
+    <script>
+const chatBtn = document.getElementById("chatBtn");
+const chatBox = document.getElementById("chatBox");
+const closeChat = document.getElementById("closeChat");
+const sendMsg = document.getElementById("sendMsg");
+const chatInput = document.getElementById("chatInput");
+const chatBody = document.querySelector(".chat-body");
+
+// Open/Close Chat
+chatBtn.addEventListener("click", () => chatBox.classList.toggle("d-none"));
+closeChat.addEventListener("click", () => chatBox.classList.add("d-none"));
+
+// Send Message
+sendMsg.addEventListener("click", async () => {
+  const msg = chatInput.value.trim();
+  if(!msg) return;
+
+  appendMessage("You", msg);
+  chatInput.value = "";
+
+  // API Call
+  const response = await sendToAPI(msg);
+  appendMessage("Bot", response);
+});
+
+chatInput.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") sendMsg.click();
+});
+
+// Append message
+function appendMessage(sender, msg){
+  const p = document.createElement("p");
+  p.innerHTML = `<b>${sender}:</b> ${msg}`;
+  chatBody.appendChild(p);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// API call function (OpenAI example)
+async function sendToAPI(message){
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{role: "user", content: message}],
+        max_tokens: 150
+      })
+    });
+    const data = await res.json();
+    return data.choices[0].message.content;
+  } catch (err) {
+    console.error(err);
+    return "Sorry, I am unable to respond now.";
+  }
+}
+</script>
+
     <script>
   // DOM load hone ke baad
   document.addEventListener("DOMContentLoaded", function() {
