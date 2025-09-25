@@ -81,7 +81,7 @@
             </li>
           </ul>
         </div>
-        <a class="c-btn ms-4 py-2 px-4 rounded-pill d-none d-md-block" href="#contact">Contact</a>
+        <button class="c-btn ms-4 py-2 px-4 rounded-pill d-none d-md-block" id="contactBtn">Contact</button>
       </div>
     </nav>
     <!-- navbar ends here -->
@@ -902,6 +902,17 @@ I offer a powerful skill set that turns concepts into functional and user-friend
         offset: 50,
       });
     </script>
+    <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const contactBtn = document.getElementById("contactBtn");
+    const contactSection = document.getElementById("contact");
+
+    contactBtn.addEventListener("click", () => {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    });
+  });
+</script>
+
     <!-- custom js file linking -->
     <script src="js/script.js"></script>
     
