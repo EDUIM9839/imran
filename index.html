@@ -954,7 +954,7 @@ I offer a powerful skill set that turns concepts into functional and user-friend
   </a>
 </div>
 
-    <!-- Contact Form Modal -->
+ <!-- Contact Modal -->
 <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -983,11 +983,9 @@ I offer a powerful skill set that turns concepts into functional and user-friend
   </div>
 </div>
 
-
-    <!-- chat boot -->
-    <div id="chatBot">
+<!-- Chat Bot -->
+<div id="chatBot">
   <button id="chatBtn" class="c-btn h-btn rounded-circle">💬</button>
-
   <div id="chatBox" class="chat-box d-none">
     <div class="chat-header">
       Live Chat
@@ -1000,7 +998,6 @@ I offer a powerful skill set that turns concepts into functional and user-friend
     </div>
   </div>
 </div>
-
 
 
     <!-- footer section ends here -->
@@ -1025,7 +1022,7 @@ I offer a powerful skill set that turns concepts into functional and user-friend
 
     <!-- custom js file linking -->
     <script src="js/script.js"></script>
-    <script>
+   // Chat and Contact
 const chatBtn = document.getElementById("chatBtn");
 const chatBox = document.getElementById("chatBox");
 const closeChat = document.getElementById("closeChat");
@@ -1033,25 +1030,24 @@ const sendMsg = document.getElementById("sendMsg");
 const chatInput = document.getElementById("chatInput");
 const chatBody = document.querySelector(".chat-body");
 
-// Open/Close Chat
+// Manual Chat open/close
 chatBtn.addEventListener("click", () => chatBox.classList.toggle("d-none"));
 closeChat.addEventListener("click", () => chatBox.classList.add("d-none"));
 
-// Send Message
+// Send message
 sendMsg.addEventListener("click", async () => {
   const msg = chatInput.value.trim();
   if(!msg) return;
-
   appendMessage("You", msg);
   chatInput.value = "";
 
-  // API Call
+  // Example API call (replace with real API)
   const response = await sendToAPI(msg);
   appendMessage("Bot", response);
 });
 
-chatInput.addEventListener("keypress", function(e) {
-  if (e.key === "Enter") sendMsg.click();
+chatInput.addEventListener("keypress", function(e){
+  if(e.key === "Enter") sendMsg.click();
 });
 
 // Append message
@@ -1062,48 +1058,35 @@ function appendMessage(sender, msg){
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-// API call function (OpenAI example)
-async function sendToAPI(message){
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer YOUR_OPENAI_API_KEY"
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{role: "user", content: message}],
-        max_tokens: 150
-      })
-    });
-    const data = await res.json();
-    return data.choices[0].message.content;
-  } catch (err) {
-    console.error(err);
-    return "Sorry, I am unable to respond now.";
-  }
+// Dummy API function
+async function sendToAPI(msg){
+  return "Hello! This is a bot response.";
 }
-</script>
-    <script>
-  // Wait for the page to load
-  window.addEventListener("load", function() {
-    // 30 seconds delay (30000 ms)
-    setTimeout(function() {
-      var myModal = new bootstrap.Modal(document.getElementById('contactModal'));
-      myModal.show();
-    }, 30000);
-  });
-      window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.getElementById("chatBox").style.display = "flex";
-    }, 30000); // 30 seconds delay
 
-    // Close chat button
-    document.getElementById("closeChatBtn").addEventListener("click", function() {
-      document.getElementById("chatBox").style.display = "none";
-    });
-</script>
+// **Open both modal and chat only once**
+let openedOnce = false;
+
+function openChatAndModalOnce(){
+  if(openedOnce) return;
+  openedOnce = true;
+
+  // Open Contact Modal
+  const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+  contactModal.show();
+
+  // Open Chat Box
+  chatBox.classList.remove("d-none");
+}
+
+// Trigger after 30 seconds
+window.addEventListener("load", function(){
+  setTimeout(openChatAndModalOnce, 30000);
+});
+
+// Trigger on scroll (once)
+window.addEventListener("scroll", function(){
+  openChatAndModalOnce();
+});
 
 
     <script>
