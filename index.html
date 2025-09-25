@@ -37,6 +37,26 @@
 
     <!-- jquery cdn link  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+      .fixed-social-icons {
+  position: fixed;       /* page ke saath fixed */
+  top: 50%;              /* screen ke vertical center me */
+  right: 10px;           /* right side se distance */
+  transform: translateY(-50%); /* exact center ke liye */
+  z-index: 9999;         /* page ke upar rahe */
+}
+
+.fixed-social-icons a {
+  color: #3f396d;        /* icon color */
+  transition: all 0.3s ease;
+}
+
+.fixed-social-icons a:hover {
+  color: #f97316;        /* hover color */
+  transform: scale(1.2); /* thoda enlarge on hover */
+}
+
+    </style>
   </head>
   <body>
     <!-- navbar starts -->
@@ -884,6 +904,24 @@ I offer a powerful skill set that turns concepts into functional and user-friend
 
       <p>Copyright 2024 Portfolio | All Rights Reserved.</p>
     </footer>
+
+
+    <!-- Fixed Social Media Icons on Right Center -->
+<div class="fixed-social-icons d-flex flex-column align-items-center">
+  <a href="https://www.facebook.com/" target="_blank" class="mb-3">
+    <i class="bi bi-facebook fs-3"></i>
+  </a>
+  <a href="https://www.twitter.com/" target="_blank" class="mb-3">
+    <i class="bi bi-twitter fs-3"></i>
+  </a>
+  <a href="https://www.instagram.com/" target="_blank" class="mb-3">
+    <i class="bi bi-instagram fs-3"></i>
+  </a>
+  <a href="https://www.linkedin.com/" target="_blank" class="mb-3">
+    <i class="bi bi-linkedin fs-3"></i>
+  </a>
+</div>
+
     <!-- footer section ends here -->
 
       <!-- bootstrap javascript cdn link  -->
