@@ -55,6 +55,25 @@
   color: #f97316;        /* hover color */
   transform: scale(1.2); /* thoda enlarge on hover */
 }
+.modal-content {
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.modal-header h5 {
+  color: #3f396d;
+  font-weight: 600;
+}
+
+.c-btn.h-btn {
+  background-color: #f97316;
+  color: #fff;
+  border: none;
+}
+
+.c-btn.h-btn:hover {
+  background-color: #3f396d;
+}
 
     </style>
   </head>
@@ -101,7 +120,7 @@
             </li>
           </ul>
         </div>
-        <button class="c-btn ms-4 py-2 px-4 rounded-pill d-none d-md-block" id="contactBtn">Contact</button>
+        <button class="c-btn ms-4 py-2 px-4 rounded-pill d-none d-md-block" data-bs-toggle="modal" data-bs-target="#contactModal">Contact</button>
       </div>
     </nav>
     <!-- navbar ends here -->
@@ -928,6 +947,36 @@ I offer a powerful skill set that turns concepts into functional and user-friend
     <i class="bi bi-github fs-3"></i>
   </a>
 </div>
+
+    <!-- Contact Form Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="contactModalLabel">Get in Touch</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Name" required />
+          </div>
+          <div class="mb-3">
+            <input type="email" class="form-control" placeholder="E-mail" required />
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Mobile No." />
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control" placeholder="Message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="c-btn h-btn py-2 px-4 rounded-pill w-100">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- footer section ends here -->
 
