@@ -902,19 +902,26 @@ I offer a powerful skill set that turns concepts into functional and user-friend
         offset: 50,
       });
     </script>
+
+
+    <!-- custom js file linking -->
+    <script src="js/script.js"></script>
     <script>
+  // DOM load hone ke baad
   document.addEventListener("DOMContentLoaded", function() {
-    const contactBtn = document.getElementById("contactBtn");
+    // Navbar ka Contact button
+    const contactBtn = document.querySelector(".c-btn.d-none.d-md-block");
+
+    // Contact section
     const contactSection = document.getElementById("contact");
 
-    contactBtn.addEventListener("click", () => {
+    // Click par smooth scroll
+    contactBtn.addEventListener("click", function() {
       contactSection.scrollIntoView({ behavior: "smooth" });
     });
   });
 </script>
 
-    <!-- custom js file linking -->
-    <script src="js/script.js"></script>
     
   </body>
 </html>
