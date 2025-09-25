@@ -81,6 +81,14 @@
 .chat-body { padding: 1rem; max-height: 200px; overflow-y: auto; }
 .chat-footer { padding: 1rem; border-top: 1px solid #ccc; }
 
+      .skill-with-progress, .skill-detail {
+  overflow: hidden;
+}
+#about {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
     </style>
   </head>
   <body>
@@ -1012,17 +1020,20 @@ I offer a powerful skill set that turns concepts into functional and user-friend
     <!-- AOS library javascript link  -->
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
-      // initializing AOS library
       AOS.init({
-        duration: 1000,
-        offset: 50,
-      });
+  offset: 100,
+  duration: 800,
+  easing: 'ease-in-out',
+  once: true
+});
+
     </script>
 
 
     <!-- custom js file linking -->
     <script src="js/script.js"></script>
    // Chat and Contact
+    <script>
 const chatBtn = document.getElementById("chatBtn");
 const chatBox = document.getElementById("chatBox");
 const closeChat = document.getElementById("closeChat");
@@ -1088,7 +1099,7 @@ window.addEventListener("scroll", function(){
   openChatAndModalOnce();
 });
 
-
+    </script>
     <script>
   // DOM load hone ke baad
   document.addEventListener("DOMContentLoaded", function() {
