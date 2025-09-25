@@ -1033,7 +1033,8 @@ I offer a powerful skill set that turns concepts into functional and user-friend
     <!-- custom js file linking -->
     <script src="js/script.js"></script>
    
-    <script>
+ <script>
+
 const chatBtn = document.getElementById("chatBtn");
 const chatBox = document.getElementById("chatBox");
 const closeChat = document.getElementById("closeChat");
@@ -1041,25 +1042,9 @@ const sendMsg = document.getElementById("sendMsg");
 const chatInput = document.getElementById("chatInput");
 const chatBody = document.querySelector(".chat-body");
 
-// Manual Chat open/close
+// Manual open/close
 chatBtn.addEventListener("click", () => chatBox.classList.toggle("d-none"));
 closeChat.addEventListener("click", () => chatBox.classList.add("d-none"));
-
-// Send message
-sendMsg.addEventListener("click", async () => {
-  const msg = chatInput.value.trim();
-  if(!msg) return;
-  appendMessage("You", msg);
-  chatInput.value = "";
-
-  // Example API call (replace with real API)
-  const response = await sendToAPI(msg);
-  appendMessage("Bot", response);
-});
-
-chatInput.addEventListener("keypress", function(e){
-  if(e.key === "Enter") sendMsg.click();
-});
 
 // Append message
 function appendMessage(sender, msg){
@@ -1069,23 +1054,55 @@ function appendMessage(sender, msg){
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-// Dummy API function
+// API Call function
 async function sendToAPI(msg){
-  return "Hello! This is a bot response.";
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{role:"user", content: msg}],
+        max_tokens: 150
+      })
+    });
+    const data = await res.json();
+    return data.choices[0].message.content;
+  } catch(err){
+    console.error(err);
+    return "Sorry, I am unable to respond now.";
+  }
 }
 
-// **Open both modal and chat only once**
-let openedOnce = false;
+// Send message
+sendMsg.addEventListener("click", async () => {
+  const msg = chatInput.value.trim();
+  if(!msg) return;
+  appendMessage("You", msg);
+  chatInput.value = "";
+  const response = await sendToAPI(msg);
+  appendMessage("Bot", response);
+});
 
+// Send on Enter key
+chatInput.addEventListener("keypress", function(e){
+  if(e.key === "Enter") sendMsg.click();
+});
+
+// Open modal + chat only once
+let openedOnce = false;
 function openChatAndModalOnce(){
   if(openedOnce) return;
   openedOnce = true;
 
-  // Open Contact Modal
+  // Contact Modal
   const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
   contactModal.show();
 
-  // Open Chat Box
+  // Chat Box
   chatBox.classList.remove("d-none");
 }
 
@@ -1094,12 +1111,14 @@ window.addEventListener("load", function(){
   setTimeout(openChatAndModalOnce, 30000);
 });
 
-// Trigger on scroll (once)
-window.addEventListener("scroll", function(){
-  openChatAndModalOnce();
+// Optional: Contact form submit (just alert)
+document.getElementById("contactForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  alert("Form submitted!");
+  this.reset();
+  bootstrap.Modal.getInstance(document.getElementById('contactModal')).hide();
 });
-
-    </script>
+</script>
     <script>
   // DOM load hone ke baad
   document.addEventListener("DOMContentLoaded", function() {
