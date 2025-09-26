@@ -1319,7 +1319,7 @@ document.addEventListener("DOMContentLoaded", function() {
         col.innerHTML = `
           <div class="card">
             <div class="card-body text-center">
-              <h4 class="card-title">${repo}</h4>
+              <h4 class="card-title">${repo.name}</h4>
               <p>${repo.description ? repo.description : "No description"}</p>
               <span class="badge bg-secondary badge-pill">${repo.language ? repo.language : "N/A"}</span><br/><br/>
               <a href="${repo.html_url}" target="_blank" class="read-more-btn link">View on GitHub</a>
@@ -1336,6 +1336,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
   fetchGithubRepos();
 });
+</script>
+<script>
+const githubUsername = "your-username"; // Replace with your GitHub username
+
+async function fetchRepos() {
+  try {
+    const res = await fetch(`https://api.github.com/users/${githubUsername}/repos`);
+    const repos = await res.json();
+
+    console.log("GitHub API response:", repos); // Print the full response
+
+    
+  } catch (err) {
+    console.error("Error fetching repos:", err);
+  }
+}
+
+// Call the function
+fetchRepos();
 </script>
 
 
