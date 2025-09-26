@@ -1042,42 +1042,75 @@ document.addEventListener("DOMContentLoaded", function() {
   const chatInput = document.getElementById("chatInput");
   const chatBody = document.querySelector(".chat-body");
 
-  // Manual open/close
+  // Open/close chat
   chatBtn.addEventListener("click", () => chatBox.classList.toggle("d-none"));
   closeChat.addEventListener("click", () => chatBox.classList.add("d-none"));
 
   // Append message
-  function appendMessage(sender, msg){
-    if(!chatBody) return;
+  function appendMessage(sender, msg, options = []) {
     const p = document.createElement("p");
     p.innerHTML = `<b>${sender}:</b> ${msg}`;
     chatBody.appendChild(p);
+
+    // Add option buttons if any
+    if(options.length > 0){
+      const btnContainer = document.createElement("div");
+      btnContainer.classList.add("chat-options");
+      options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.innerHTML = opt.label; // can include emojis
+        btn.className = "c-btn h-btn mt-1";
+        btn.addEventListener("click", () => {
+          appendMessage("You", opt.label);
+          btnContainer.remove();
+          setTimeout(() => {
+            if(opt.action) opt.action();
+            else appendMessage("Bot 🤖", opt.reply);
+          }, 300);
+        });
+        btnContainer.appendChild(btn);
+      });
+      chatBody.appendChild(btnContainer);
+    }
+
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // API Call function
-  async function sendToAPI(msg){
-    try {
-      const res = await fetch("https://chatbot-worker.mohdim9839.workers.dev", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg })
-      });
-      const data = await res.json();
-      return data.reply || "Error: No response from bot.";
-    } catch(err) {
-      return "Error: API request failed.";
+  // Predefined bot reply logic
+  function getBotReply(msg){
+    msg = msg.toLowerCase();
+    if(msg.includes("hi") || msg.includes("hello") || msg.includes("hey")){
+      appendMessage("Bot 🤖", "Welcome to my portfolio! 👋 Here’s what you can explore:", [
+        { label: "About Me", reply: "I am a web developer specializing in modern web apps and freelance projects." },
+        { label: "Skills", reply: "My skills include HTML, CSS, JS, Laravel, React, and more." },
+        { label: "Freelance Services", reply: "I offer website design, web apps, and portfolio sites as freelance services." },
+        { label: "Contact Info", reply: "You can reach me via phone, email, or social media.", action: showContactOptions },
+        { label: "Portfolio Projects", reply: "Check out my recent freelance projects in the Projects section." }
+      ]);
+      return null; // already handled
+    } else {
+      appendMessage("Bot 🤖", "Thanks for your message! I'm a portfolio bot 🤖. Click options above.");
     }
   }
 
+  // Show contact info options
+  function showContactOptions(){
+    appendMessage("Bot 🤖", "Here are my contact details:", [
+      { label: "Phone 📞", reply: "You can call me at: +91-XXXXXXXXXX" },
+      { label: "Email ✉️", reply: "Send me an email: example@gmail.com" },
+      { label: "LinkedIn 🔗", reply: "Visit my LinkedIn: https://linkedin.com/in/yourprofile" },
+      { label: "GitHub 💻", reply: "Check my GitHub: https://github.com/yourusername" },
+      { label: "Twitter 🐦", reply: "Follow me on Twitter: https://twitter.com/yourhandle" }
+    ]);
+  }
+
   // Send message
-  sendMsg.addEventListener("click", async () => {
+  sendMsg.addEventListener("click", () => {
     const msg = chatInput.value.trim();
     if(!msg) return;
     appendMessage("You", msg);
     chatInput.value = "";
-    const response = await sendToAPI(msg);
-    appendMessage("Bot", response);
+    getBotReply(msg);
   });
 
   // Send on Enter key
@@ -1085,48 +1118,18 @@ document.addEventListener("DOMContentLoaded", function() {
     if(e.key === "Enter") sendMsg.click();
   });
 
-  // Open modal + chat only once
+  // Auto-open chat after 3 seconds
   let openedOnce = false;
-  function openChatAndModalOnce(){
+  function openChatOnce(){
     if(openedOnce) return;
     openedOnce = true;
-
-    // Contact Modal
-    const modalEl = document.getElementById('contactModal');
-    if(modalEl) {
-      const contactModal = new bootstrap.Modal(modalEl);
-      contactModal.show();
-    }
-
-    // Chat Box
-    if(chatBox) chatBox.classList.remove("d-none");
+    chatBox.classList.remove("d-none");
+    appendMessage("Bot 🤖", "Hi! I’m your portfolio bot. Type 'Hi' or 'Hello' to start.");
   }
-
-  // Trigger after 30 seconds
-  setTimeout(openChatAndModalOnce, 30000);
-
-  // Contact form submit (optional)
-  const contactForm = document.getElementById("contactForm");
-  if(contactForm){
-    contactForm.addEventListener("submit", function(e){
-      e.preventDefault();
-      alert("Form submitted!");
-      this.reset();
-      const modalInstance = bootstrap.Modal.getInstance(document.getElementById('contactModal'));
-      if(modalInstance) modalInstance.hide();
-    });
-  }
-
-  // Navbar Contact button scroll
-  const contactBtn = document.querySelector(".c-btn.d-none.d-md-block");
-  const contactSection = document.getElementById("contact");
-  if(contactBtn && contactSection){
-    contactBtn.addEventListener("click", function() {
-      contactSection.scrollIntoView({ behavior: "smooth" });
-    });
-  }
+  setTimeout(openChatOnce, 3000);
 });
 </script>
+
 
     
   </body>
