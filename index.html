@@ -1015,10 +1015,10 @@ I offer a powerful skill set that turns concepts into functional and user-friend
     </section>
     <!-- contact section ends here -->
     <div class="portfolio-body">
-  <div class="row justify-content-evenly px-4" id="githubRepos">
+  <!-- <div class="row justify-content-evenly px-4" id="githubRepos">
     <!-- GitHub repos will be injected here -->
   </div>
-</div>
+</div> -->
 
 
       <!-- now we will make back to top button when user click on it it will be redirected to top page  -->
@@ -1301,41 +1301,41 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const repoContainer = document.getElementById("githubRepos");
-  const githubUsername = "EDUIM9839"; // Replace with your GitHub username
+// document.addEventListener("DOMContentLoaded", function() {
+//   const repoContainer = document.getElementById("githubRepos");
+//   const githubUsername = "EDUIM9839"; // Replace with your GitHub username
 
-  async function fetchGithubRepos() {
-    try {
-      const res = await fetch(`https://api.github.com/users/${githubUsername}/repos?sort=updated`);
-      const repos = await res.json();
+//   async function fetchGithubRepos() {
+//     try {
+//       const res = await fetch(`https://api.github.com/users/${githubUsername}/repos?sort=updated`);
+//       const repos = await res.json();
 
-      // Clear container
-      repoContainer.innerHTML = "";
+//       // Clear container
+//       repoContainer.innerHTML = "";
 
-      repos.forEach(repo => {
-        const col = document.createElement("div");
-        col.className = "post col-md-4 all col-10 mt-3 mt-md-0";
-        col.innerHTML = `
-          <div class="card">
-            <div class="card-body text-center">
-              <h4 class="card-title">${repo.name}</h4>
-              <p>${repo.description ? repo.description : "No description"}</p>
-              <span class="badge bg-secondary badge-pill">${repo.language ? repo.language : "N/A"}</span><br/><br/>
-              <a href="${repo.html_url}" target="_blank" class="read-more-btn link">View on GitHub</a>
-            </div>
-          </div>
-        `;
-        repoContainer.appendChild(col);
-      });
-    } catch(err) {
-      repoContainer.innerHTML = `<p class="text-center text-danger">Unable to fetch GitHub repos.</p>`;
-      console.error(err);
-    }
-  }
+//       repos.forEach(repo => {
+//         const col = document.createElement("div");
+//         col.className = "post col-md-4 all col-10 mt-3 mt-md-0";
+//         col.innerHTML = `
+//           <div class="card">
+//             <div class="card-body text-center">
+//               <h4 class="card-title">${repo.name}</h4>
+//               <p>${repo.description ? repo.description : "No description"}</p>
+//               <span class="badge bg-secondary badge-pill">${repo.language ? repo.language : "N/A"}</span><br/><br/>
+//               <a href="${repo.html_url}" target="_blank" class="read-more-btn link">View on GitHub</a>
+//             </div>
+//           </div>
+//         `;
+//         repoContainer.appendChild(col);
+//       });
+//     } catch(err) {
+//       repoContainer.innerHTML = `<p class="text-center text-danger">Unable to fetch GitHub repos.</p>`;
+//       console.error(err);
+//     }
+//   }
 
-  fetchGithubRepos();
-});
+//   fetchGithubRepos();
+// });
 </script>
 <script>
 // const githubUsername = "EDUIM9839"; // Replace with your GitHub username
