@@ -86,56 +86,101 @@
 
     </style>
     <!-- CSS -->
+
+<!-- CSS -->
 <style>
-.chat-box {
-  width: 320px;
-  height: 450px;
-  border: 1px solid #ccc;
+/* Fixed bottom-right position */
+#chatBot {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 9999;
+}
+
+/* Chat button */
+#chatBtn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: 0.3s;
+}
+#chatBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Chat box styling */
+.chat-box {
+  width: 360px;
+  height: 500px;
+  border: 1px solid #ccc;
   background: white;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  border-radius: 12px;
   overflow: hidden;
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Header */
 .chat-header {
   background: #007bff;
   color: white;
-  padding: 10px;
+  padding: 10px 15px;
   font-weight: bold;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  font-size: 14px;
 }
 
+/* Body */
 .chat-body {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
-  background: #f8f9fa;
+  background: #f5f5f5;
+  font-size: 13px;
 }
 
+/* Footer */
 .chat-footer {
   padding: 10px;
   background: #e9ecef;
 }
 
+/* Buttons inside chat */
+.chat-options {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
 .chat-options button {
-  margin: 5px 5px 0 0;
-  padding: 6px 12px;
-  border-radius: 5px;
+  margin: 3px 5px 3px 0;
+  padding: 5px 10px;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
   background-color: #007bff;
   color: white;
+  font-size: 12px;
   transition: 0.3s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 .chat-options button:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 /* Message styles */
@@ -143,9 +188,11 @@
   max-width: 75%;
   margin: 5px 0;
   padding: 8px 12px;
-  border-radius: 12px;
+  border-radius: 15px;
   clear: both;
   word-wrap: break-word;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .bot-msg {
@@ -1064,7 +1111,10 @@ I offer a powerful skill set that turns concepts into functional and user-friend
 
 <!-- Chat HTML -->
 <div id="chatBot">
+  <!-- Floating Chat Button -->
   <button id="chatBtn" class="c-btn h-btn rounded-circle">💬</button>
+
+  <!-- Chat Box -->
   <div id="chatBox" class="chat-box d-none">
     <div class="chat-header">
       Live Chat
@@ -1104,6 +1154,9 @@ I offer a powerful skill set that turns concepts into functional and user-friend
     <!-- custom js file linking -->
     <script src="js/script.js"></script>
    
+
+
+
 
 
 
@@ -1152,9 +1205,8 @@ document.addEventListener("DOMContentLoaded", function() {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  function botTyping(callback, delay = 1000){
+  function botTyping(callback, delay = 1200){
     const typing = document.createElement("p");
-    typing.id = "typing";
     typing.className = "message bot-msg";
     typing.innerHTML = `<b>Bot 🤖:</b> <i>typing...</i>`;
     chatBody.appendChild(typing);
@@ -1168,33 +1220,33 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function showContactOptions(){
     appendMessage("Bot 🤖", "Here’s how you can reach me:", [
-      { label: "Phone 📞", reply: "Call me at: +91-XXXXXXXXXX" },
-      { label: "Email ✉️", reply: "Send email: example@gmail.com" },
-      { label: "LinkedIn 🔗", reply: "<a href='https://linkedin.com/in/yourprofile' target='_blank'>LinkedIn Profile</a>" },
-      { label: "GitHub 💻", reply: "<a href='https://github.com/yourusername' target='_blank'>GitHub Profile</a>" },
-      { label: "Twitter 🐦", reply: "<a href='https://twitter.com/yourhandle' target='_blank'>Twitter Profile</a>" }
+      { label: "Phone 📞", reply: "Call me at: +91-6386117573" },
+      { label: "Email ✉️", reply: "Send email: mohdim9839@gmail.com" },
+      { label: "LinkedIn 🔗", reply: "<a href='https://www.linkedin.com/in/mohammad-imran-b49109245?utm_source' target='_blank'>LinkedIn Profile</a>" },
+      { label: "GitHub 💻", reply: "<a href='https://github.com/EDUIM9839/' target='_blank'>GitHub Profile</a>" },
+      { label: "Twitter 🐦", reply: "<a href='https://twitter.com/' target='_blank'>Twitter Profile</a>" }
     ]);
   }
 
   function showFreelanceServices(){
-    appendMessage("Bot 🤖", "I offer the following freelance services:", [
-      { label: "Web Design 🎨", reply: "I create modern, responsive website designs tailored to your brand." },
-      { label: "Web Apps ⚡", reply: "I develop custom web apps using Laravel & React." },
-      { label: "Portfolio Sites 💻", reply: "I build personal and business portfolio websites." }
+    appendMessage("Bot 🤖", "I offer these freelance services:", [
+      { label: "Web Design 🎨", reply: "Modern, responsive website designs." },
+      { label: "Web Apps ⚡", reply: "Custom web apps using Laravel & React." },
+      { label: "Portfolio Sites 💻", reply: "Personal & business portfolio sites." }
     ]);
   }
 
   function showProjects(){
-    appendMessage("Bot 🤖", "Here are some of my recent projects:", [
-      { label: "E-commerce Website 🛒", reply: "Full-featured online store built with Laravel." },
-      { label: "Corporate Website 🏢", reply: "Modern corporate website built with HTML, CSS, and JS." },
-      { label: "Portfolio Site 🎨", reply: "Personal portfolio site showcasing my projects." }
+    appendMessage("Bot 🤖", "Some of my projects:", [
+      { label: "E-commerce 🛒", reply: "Full-featured online store built with Laravel." },
+      { label: "Corporate 🏢", reply: "Modern corporate website with HTML/CSS/JS." },
+      { label: "Portfolio 🎨", reply: "Personal portfolio site showcasing projects." }
     ]);
   }
 
   function showSkills(){
-    appendMessage("Bot 🤖", "My key skills include:", [
-      { label: "Frontend 💻", reply: "HTML, CSS, JavaScript, React, UI/UX design." },
+    appendMessage("Bot 🤖", "My key skills:", [
+      { label: "Frontend 💻", reply: "HTML, CSS, JS, React, UI/UX." },
       { label: "Backend ⚙️", reply: "PHP, Laravel, APIs, MySQL." },
       { label: "Tools 🛠️", reply: "Git, GitHub, VS Code, Bootstrap, Figma." }
     ]);
@@ -1204,18 +1256,18 @@ document.addEventListener("DOMContentLoaded", function() {
     msg = msg.toLowerCase();
     if(msg.includes("hi") || msg.includes("hello") || msg.includes("hey")){
       botTyping(() => {
-        appendMessage("Bot 🤖", "Welcome to my portfolio! 👋 Explore options below:", [
-          { label: "About Me 👤", reply: "I am a web developer specializing in modern web apps and freelance projects." },
+        appendMessage("Bot 🤖", "Welcome to my portfolio! 👋 Explore below:", [
+          { label: "About Me 👤", reply: "I am a web developer specializing in modern web apps & freelance projects." },
           { label: "Skills 💡", action: showSkills },
           { label: "Freelance Services 💼", action: showFreelanceServices },
           { label: "Portfolio Projects 📂", action: showProjects },
           { label: "Contact Info 📱", action: showContactOptions }
         ]);
-      }, 1200);
+      });
     } else {
       botTyping(() => {
-        appendMessage("Bot 🤖", "I’m a portfolio bot 🤖. Use the buttons above to explore my work!");
-      }, 1200);
+        appendMessage("Bot 🤖", "I’m your portfolio bot 🤖. Use the buttons above to explore my work!");
+      });
     }
   }
 
@@ -1236,11 +1288,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if(openedOnce) return;
     openedOnce = true;
     chatBox.classList.remove("d-none");
-    appendMessage("Bot 🤖", "Hi! I’m your portfolio assistant. Type 'Hi' or 'Hello' to start the conversation.");
+    appendMessage("Bot 🤖", "Hi! I’m your portfolio assistant. Type 'Hi' or 'Hello' to start.");
   }
-  setTimeout(openChatOnce, 3000);
+  setTimeout(openChatOnce, 2000);
 });
 </script>
+
 
 
 
