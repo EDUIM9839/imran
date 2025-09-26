@@ -1338,23 +1338,27 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 <script>
-const githubUsername = "your-username"; // Replace with your GitHub username
+const githubUsername = "EDUIM9839"; // Replace with your GitHub username
 
-async function fetchRepos() {
+async function fetchAndPrintRepos() {
   try {
     const res = await fetch(`https://api.github.com/users/${githubUsername}/repos`);
     const repos = await res.json();
 
-    console.log("GitHub API response:", repos); // Print the full response
+    console.log("GitHub API full response:", repos);
 
-    
+    repos.forEach((repo, index) => {
+      console.log(`\n--- Repo ${index + 1} ---`);
+      for (let key in repo) {
+        console.log(`${key}:`, repo[key]);
+      }
+    });
   } catch (err) {
-    console.error("Error fetching repos:", err);
+    console.error("Error fetching GitHub repos:", err);
   }
 }
 
-// Call the function
-fetchRepos();
+fetchAndPrintRepos();
 </script>
 
 
