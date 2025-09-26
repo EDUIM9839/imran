@@ -74,12 +74,6 @@
 .c-btn.h-btn:hover {
   background-color: #3f396d;
 }
-#chatBot { position: fixed; bottom: 50px; right: 3px; z-index: 9999; }
-#chatBtn { background-color: #f97316; color: #fff; width: 50px; height: 50px; font-size: 1.5rem; border: none; border-radius: 50%; }
-#chatBox { position: absolute; bottom: 70px; right: 0; width: 300px; background: #fff; border-radius: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.3); overflow: hidden; }
-.chat-header { background-color: #3f396d; color: #fff; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; }
-.chat-body { padding: 1rem; max-height: 200px; overflow-y: auto; }
-.chat-footer { padding: 1rem; border-top: 1px solid #ccc; }
 
       .skill-with-progress, .skill-detail {
   overflow: hidden;
@@ -88,8 +82,85 @@
   padding-bottom: 0;
   margin-bottom: 0;
 }
+      
 
     </style>
+    <!-- CSS -->
+<style>
+.chat-box {
+  width: 320px;
+  height: 450px;
+  border: 1px solid #ccc;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.chat-header {
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: #f8f9fa;
+}
+
+.chat-footer {
+  padding: 10px;
+  background: #e9ecef;
+}
+
+.chat-options button {
+  margin: 5px 5px 0 0;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: 0.3s;
+}
+.chat-options button:hover {
+  background-color: #0056b3;
+}
+
+/* Message styles */
+.message {
+  max-width: 75%;
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  clear: both;
+  word-wrap: break-word;
+}
+
+.bot-msg {
+  background: #e0e0e0;
+  float: left;
+  text-align: left;
+}
+
+.user-msg {
+  background: #007bff;
+  color: white;
+  float: right;
+  text-align: right;
+}
+</style>
   </head>
   <body>
     <!-- navbar starts -->
@@ -991,7 +1062,7 @@ I offer a powerful skill set that turns concepts into functional and user-friend
   </div>
 </div>
 
-<!-- Chat Bot -->
+<!-- Chat HTML -->
 <div id="chatBot">
   <button id="chatBtn" class="c-btn h-btn rounded-circle">💬</button>
   <div id="chatBox" class="chat-box d-none">
@@ -999,7 +1070,7 @@ I offer a powerful skill set that turns concepts into functional and user-friend
       Live Chat
       <button id="closeChat" class="btn-close float-end"></button>
     </div>
-    <div class="chat-body"></div>
+    <div id="chatBody" class="chat-body"></div>
     <div class="chat-footer">
       <input type="text" id="chatInput" placeholder="Type a message..." class="form-control"/>
       <button id="sendMsg" class="c-btn h-btn mt-2 w-100">Send</button>
@@ -1033,6 +1104,11 @@ I offer a powerful skill set that turns concepts into functional and user-friend
     <!-- custom js file linking -->
     <script src="js/script.js"></script>
    
+
+
+
+
+<!-- JS -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const chatBtn = document.getElementById("chatBtn");
@@ -1040,33 +1116,33 @@ document.addEventListener("DOMContentLoaded", function() {
   const closeChat = document.getElementById("closeChat");
   const sendMsg = document.getElementById("sendMsg");
   const chatInput = document.getElementById("chatInput");
-  const chatBody = document.querySelector(".chat-body");
+  const chatBody = document.getElementById("chatBody");
 
-  // Open/close chat
   chatBtn.addEventListener("click", () => chatBox.classList.toggle("d-none"));
   closeChat.addEventListener("click", () => chatBox.classList.add("d-none"));
 
-  // Append message
   function appendMessage(sender, msg, options = []) {
     const p = document.createElement("p");
+    p.className = "message " + (sender === "You" ? "user-msg" : "bot-msg");
     p.innerHTML = `<b>${sender}:</b> ${msg}`;
     chatBody.appendChild(p);
 
-    // Add option buttons if any
     if(options.length > 0){
       const btnContainer = document.createElement("div");
       btnContainer.classList.add("chat-options");
       options.forEach(opt => {
         const btn = document.createElement("button");
-        btn.innerHTML = opt.label; // can include emojis
-        btn.className = "c-btn h-btn mt-1";
+        btn.innerHTML = opt.label;
         btn.addEventListener("click", () => {
           appendMessage("You", opt.label);
           btnContainer.remove();
           setTimeout(() => {
-            if(opt.action) opt.action();
-            else appendMessage("Bot 🤖", opt.reply);
-          }, 300);
+            if(opt.action) {
+              botTyping(opt.action, 1000);
+            } else {
+              botTyping(() => appendMessage("Bot 🤖", opt.reply), 1000);
+            }
+          }, 400);
         });
         btnContainer.appendChild(btn);
       });
@@ -1076,35 +1152,73 @@ document.addEventListener("DOMContentLoaded", function() {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // Predefined bot reply logic
-  function getBotReply(msg){
-    msg = msg.toLowerCase();
-    if(msg.includes("hi") || msg.includes("hello") || msg.includes("hey")){
-      appendMessage("Bot 🤖", "Welcome to my portfolio! 👋 Here’s what you can explore:", [
-        { label: "About Me", reply: "I am a web developer specializing in modern web apps and freelance projects." },
-        { label: "Skills", reply: "My skills include HTML, CSS, JS, Laravel, React, and more." },
-        { label: "Freelance Services", reply: "I offer website design, web apps, and portfolio sites as freelance services." },
-        { label: "Contact Info", reply: "You can reach me via phone, email, or social media.", action: showContactOptions },
-        { label: "Portfolio Projects", reply: "Check out my recent freelance projects in the Projects section." }
-      ]);
-      return null; // already handled
-    } else {
-      appendMessage("Bot 🤖", "Thanks for your message! I'm a portfolio bot 🤖. Click options above.");
-    }
+  function botTyping(callback, delay = 1000){
+    const typing = document.createElement("p");
+    typing.id = "typing";
+    typing.className = "message bot-msg";
+    typing.innerHTML = `<b>Bot 🤖:</b> <i>typing...</i>`;
+    chatBody.appendChild(typing);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    setTimeout(() => {
+      typing.remove();
+      callback();
+    }, delay);
   }
 
-  // Show contact info options
   function showContactOptions(){
-    appendMessage("Bot 🤖", "Here are my contact details:", [
-      { label: "Phone 📞", reply: "You can call me at: +91-XXXXXXXXXX" },
-      { label: "Email ✉️", reply: "Send me an email: example@gmail.com" },
-      { label: "LinkedIn 🔗", reply: "Visit my LinkedIn: https://linkedin.com/in/yourprofile" },
-      { label: "GitHub 💻", reply: "Check my GitHub: https://github.com/yourusername" },
-      { label: "Twitter 🐦", reply: "Follow me on Twitter: https://twitter.com/yourhandle" }
+    appendMessage("Bot 🤖", "Here’s how you can reach me:", [
+      { label: "Phone 📞", reply: "Call me at: +91-XXXXXXXXXX" },
+      { label: "Email ✉️", reply: "Send email: example@gmail.com" },
+      { label: "LinkedIn 🔗", reply: "<a href='https://linkedin.com/in/yourprofile' target='_blank'>LinkedIn Profile</a>" },
+      { label: "GitHub 💻", reply: "<a href='https://github.com/yourusername' target='_blank'>GitHub Profile</a>" },
+      { label: "Twitter 🐦", reply: "<a href='https://twitter.com/yourhandle' target='_blank'>Twitter Profile</a>" }
     ]);
   }
 
-  // Send message
+  function showFreelanceServices(){
+    appendMessage("Bot 🤖", "I offer the following freelance services:", [
+      { label: "Web Design 🎨", reply: "I create modern, responsive website designs tailored to your brand." },
+      { label: "Web Apps ⚡", reply: "I develop custom web apps using Laravel & React." },
+      { label: "Portfolio Sites 💻", reply: "I build personal and business portfolio websites." }
+    ]);
+  }
+
+  function showProjects(){
+    appendMessage("Bot 🤖", "Here are some of my recent projects:", [
+      { label: "E-commerce Website 🛒", reply: "Full-featured online store built with Laravel." },
+      { label: "Corporate Website 🏢", reply: "Modern corporate website built with HTML, CSS, and JS." },
+      { label: "Portfolio Site 🎨", reply: "Personal portfolio site showcasing my projects." }
+    ]);
+  }
+
+  function showSkills(){
+    appendMessage("Bot 🤖", "My key skills include:", [
+      { label: "Frontend 💻", reply: "HTML, CSS, JavaScript, React, UI/UX design." },
+      { label: "Backend ⚙️", reply: "PHP, Laravel, APIs, MySQL." },
+      { label: "Tools 🛠️", reply: "Git, GitHub, VS Code, Bootstrap, Figma." }
+    ]);
+  }
+
+  function getBotReply(msg){
+    msg = msg.toLowerCase();
+    if(msg.includes("hi") || msg.includes("hello") || msg.includes("hey")){
+      botTyping(() => {
+        appendMessage("Bot 🤖", "Welcome to my portfolio! 👋 Explore options below:", [
+          { label: "About Me 👤", reply: "I am a web developer specializing in modern web apps and freelance projects." },
+          { label: "Skills 💡", action: showSkills },
+          { label: "Freelance Services 💼", action: showFreelanceServices },
+          { label: "Portfolio Projects 📂", action: showProjects },
+          { label: "Contact Info 📱", action: showContactOptions }
+        ]);
+      }, 1200);
+    } else {
+      botTyping(() => {
+        appendMessage("Bot 🤖", "I’m a portfolio bot 🤖. Use the buttons above to explore my work!");
+      }, 1200);
+    }
+  }
+
   sendMsg.addEventListener("click", () => {
     const msg = chatInput.value.trim();
     if(!msg) return;
@@ -1113,22 +1227,22 @@ document.addEventListener("DOMContentLoaded", function() {
     getBotReply(msg);
   });
 
-  // Send on Enter key
   chatInput.addEventListener("keydown", function(e){
     if(e.key === "Enter") sendMsg.click();
   });
 
-  // Auto-open chat after 3 seconds
   let openedOnce = false;
   function openChatOnce(){
     if(openedOnce) return;
     openedOnce = true;
     chatBox.classList.remove("d-none");
-    appendMessage("Bot 🤖", "Hi! I’m your portfolio bot. Type 'Hi' or 'Hello' to start.");
+    appendMessage("Bot 🤖", "Hi! I’m your portfolio assistant. Type 'Hi' or 'Hello' to start the conversation.");
   }
   setTimeout(openChatOnce, 3000);
 });
 </script>
+
+
 
 
     
